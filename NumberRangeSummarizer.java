@@ -36,6 +36,12 @@ public interface NumberRangeSummarizer {
 
 class NumberSummarizer implements NumberRangeSummarizer {
 
+    /**
+     * This method will collect the input
+     * 
+     * @param input a comma delimited list of numbers
+     * @return a sorted collection of integers from the input string
+     */
     public Collection<Integer> collect(String input) {
 
         Collection<Integer> inputCollection = Stream.of(input.split(",")).map(Integer::parseInt).sorted()
@@ -45,6 +51,13 @@ class NumberSummarizer implements NumberRangeSummarizer {
         return inputCollection;
     }
 
+    /**
+     * This method groups numbers of a collection into a range when they are
+     * sequential.
+     * 
+     * @param input a sorted collection of integers from the input string
+     * @return a string of numbers delimited by commas and summarised into ranges
+     */
     public String summarizeCollection(Collection<Integer> input) {
         ArrayList<String> output = new ArrayList<>();
         int collectionSpace = input.size();
@@ -57,6 +70,7 @@ class NumberSummarizer implements NumberRangeSummarizer {
             if (rangeLowerBounds != rangeUpperBounds)
                 output.add(rangeLowerBounds + "-" + rangeUpperBounds);
             collectionSpace -= rangeUpperBounds - rangeLowerBounds + 1;
+            System.out.println(input);
         }
         if (collectionSpace == 1)
             output.add(Collections.min(input).toString());
@@ -64,11 +78,24 @@ class NumberSummarizer implements NumberRangeSummarizer {
         return output.toString().replaceAll("\\[|\\]", "");
     }
 
+    /**
+     * This method searches a colletion of integers for numbers in sequence
+     * starting from the minimum, and finds this sequences upper bound.
+     * 
+     * @param input a sorted collection of integers from the input string
+     * @return the upper bound number of the sequence
+     */
     private int findRangeUpperBounds(Collection<Integer> input) {
+        // Starts search at the smallest integer in the collection
         int rangeCheck = Collections.min(input) + 1;
+        // Removes the smallest integer in the collection
         input.remove(Collections.min(input));
+        // Iterates through collection checking for numbers sequentially following the
+        // previous check
         while (true) {
+            // Check to see if sequentially followinhg number is in collection
             if (input.contains(rangeCheck)) {
+                // Remove number from collection and itterate to next number
                 input.remove(rangeCheck);
                 rangeCheck++;
             } else {
